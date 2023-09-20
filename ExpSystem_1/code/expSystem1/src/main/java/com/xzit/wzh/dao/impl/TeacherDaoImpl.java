@@ -14,24 +14,22 @@ import java.sql.*;
  * \* Description: MajorDao实现类
  * \
  */
-public class MajorDaoImpl implements IMajorDao {
+public class TeacherDaoImpl implements IMajorDao {
     @Override
     public MajorInfo selectByMajorId(Long majorId) {
         String sql = "select * from sys_majorinfo where major_id=?";
         Connection connection = null;
         ResultSet rs = null;
         PreparedStatement ps = null;
-        MajorInfo majorInfo = null;
+        MajorInfo majorInfo;
         try {
             connection = DBConnectionUtil.getConnection();
             ps = connection.prepareStatement(sql);
             ps.setLong(1, majorId);
             rs = ps.executeQuery();
 
-            if (rs != null) {
-                // 将结果转为对象
-                majorInfo = DBConnectionUtil.toMajorObject(rs);
-            }
+            // 将结果转为对象
+            majorInfo = DBConnectionUtil.toMajorObject(rs);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
@@ -51,17 +49,15 @@ public class MajorDaoImpl implements IMajorDao {
         Connection connection = null;
         ResultSet rs = null;
         PreparedStatement ps = null;
-        MajorInfo majorInfo = null;
+        MajorInfo majorInfo;
         try {
             connection = DBConnectionUtil.getConnection();
             ps = connection.prepareStatement(sql);
             ps.setString(1, innerCode);
             rs = ps.executeQuery();
 
-            if (rs != null) {
-                // 将结果转为对象
-                majorInfo = DBConnectionUtil.toMajorObject(rs);
-            }
+            // 将结果转为对象
+            majorInfo = DBConnectionUtil.toMajorObject(rs);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
@@ -80,17 +76,15 @@ public class MajorDaoImpl implements IMajorDao {
         Connection connection = null;
         ResultSet rs = null;
         PreparedStatement ps = null;
-        MajorInfo majorInfo = null;
+        MajorInfo majorInfo;
         try {
             connection = DBConnectionUtil.getConnection();
             ps = connection.prepareStatement(sql);
             ps.setString(1, majorName);
             rs = ps.executeQuery();
 
-            if (rs != null) {
-                // 将结果转为对象
-                majorInfo = DBConnectionUtil.toMajorObject(rs);
-            }
+            // 将结果转为对象
+            majorInfo = DBConnectionUtil.toMajorObject(rs);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
@@ -105,6 +99,11 @@ public class MajorDaoImpl implements IMajorDao {
 
     @Override
     public int insert(MajorInfo majorInfo) throws Exception {
+        // 判断是否为空数据
+        if (majorInfo == null) {
+            return 0;
+        }
+
         String sql = "insert into sys_majorinfo(" +
                 "inner_code, " +
                 "major_name, " +
@@ -121,11 +120,6 @@ public class MajorDaoImpl implements IMajorDao {
         Connection connection = null;
         int row = 0;
         PreparedStatement ps = null;
-
-        // 不允许空对象，直接返回
-        if (majorInfo == null) {
-            return row;
-        }
         try {
             connection = DBConnectionUtil.getConnection();
             ps = connection.prepareStatement(sql);
@@ -217,10 +211,6 @@ public class MajorDaoImpl implements IMajorDao {
         Connection connection = null;
         int row = 0;
         PreparedStatement ps = null;
-        // 不允许空对象，直接返回
-        if (majorInfo == null) {
-            return row;
-        }
         try {
             connection = DBConnectionUtil.getConnection();
             ps = connection.prepareStatement(sql);
@@ -257,10 +247,6 @@ public class MajorDaoImpl implements IMajorDao {
         Connection connection = null;
         int row = 0;
         PreparedStatement ps = null;
-        // 判断传入id是否为null
-        if (majorId == null) {
-            return row;
-        }
         try {
             connection = DBConnectionUtil.getConnection();
             ps = connection.prepareStatement(sql);
@@ -282,10 +268,6 @@ public class MajorDaoImpl implements IMajorDao {
     @Override
     public int deleteByMajorIds(Long[] majorIds) {
         int row = 0;
-        // 判断无数据直接返回
-        if (majorIds.length == 0) {
-            return row;
-        }
         for (Long majorId : majorIds) {
             row += deleteByMajorId(majorId);
         }

@@ -7,7 +7,7 @@ import lombok.Data;
  * \* Author: wzh
  * \* Date: 2023/9/14
  * \* TODO
- * \* Description: Major实体
+ * \* Description: 专业信息
  * \
  */
 @Data

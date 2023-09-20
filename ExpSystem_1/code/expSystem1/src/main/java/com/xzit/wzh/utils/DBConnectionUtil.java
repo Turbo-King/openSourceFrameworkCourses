@@ -1,5 +1,6 @@
 package com.xzit.wzh.utils;
 
+import com.xzit.wzh.domain.ClassInfo;
 import com.xzit.wzh.domain.MajorInfo;
 
 import java.sql.*;
@@ -55,7 +56,7 @@ public class DBConnectionUtil {
      * @Return: com.xzit.wzh.domain.MajorInfo
      * @Description: ResultSet转换为对象
      */
-    public static MajorInfo toObject(ResultSet resultSet) throws SQLException {
+    public static MajorInfo toMajorObject(ResultSet resultSet) throws SQLException {
         MajorInfo majorInfo = new MajorInfo();
         while (resultSet.next()) {
             majorInfo.setMajorId(resultSet.getLong("major_id"));
@@ -73,5 +74,23 @@ public class DBConnectionUtil {
             majorInfo.setMajorLeader(resultSet.getString("major_leader"));
         }
         return majorInfo;
+    }
+
+
+    public static ClassInfo toClassObject(ResultSet resultSet) throws SQLException {
+        ClassInfo classInfo = new ClassInfo();
+        while (resultSet.next()) {
+            classInfo.setClassId(resultSet.getLong("class_id"));
+            classInfo.setMajorId(resultSet.getLong("major_id"));
+            classInfo.setClassName(resultSet.getString("class_name"));
+            classInfo.setAcademicYear(resultSet.getString("academic_year"));
+            classInfo.setSemester(resultSet.getString("semester"));
+            classInfo.setClassAdvisor(resultSet.getString("class_advisor"));
+            classInfo.setNumberStudents(resultSet.getLong("number_students"));
+            classInfo.setStatus(resultSet.getString("status"));
+            classInfo.setCreateDate(resultSet.getString("create_date"));
+            classInfo.setClassDescription(resultSet.getString("class_description"));
+        }
+        return classInfo;
     }
 }
