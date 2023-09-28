@@ -5,6 +5,8 @@ import com.xzit.wzh.domain.MajorInfo;
 import com.xzit.wzh.utils.DBConnectionUtil;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * \* Created with IntelliJ IDEA.
@@ -15,6 +17,90 @@ import java.sql.*;
  * \
  */
 public class MajorDaoImpl implements IMajorDao {
+    @Override
+    public List<MajorInfo> selectAll() {
+        List<MajorInfo> majorInfos = new ArrayList<>();
+        String sql = "select * from sys_majorinfo ";
+        try {
+            //2.创建连接对象
+            Connection conn = DBConnectionUtil.getConnection();
+            //3.创建语句对象
+            PreparedStatement psmt = conn.prepareStatement(sql);
+            //4.执行SQL命令，获得ResultSet对象
+            ResultSet rs = psmt.executeQuery();
+            //5.解析结果
+            while (rs != null && rs.next()) {
+                // 将结果转为对象
+                majorInfos.add(DBConnectionUtil.toMajorObject(rs));
+            }
+            //6.释放资源
+            DBConnectionUtil.release(rs, psmt, conn);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return majorInfos;
+    }
+
+    @Override
+    public List<MajorInfo> limit(String likeMajorName, int curPage, int pageSize) {
+        List<MajorInfo> majorInfos = new ArrayList<>();
+        String sql = "select * from sys_majorinfo where major_name like ? limit ?,?";
+        Connection connection = null;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+        try {
+            connection = DBConnectionUtil.getConnection();
+            ps = connection.prepareStatement(sql);
+            if (likeMajorName != null && !likeMajorName.equals("")) {
+                ps.setString(1, "%" + likeMajorName + "%");
+            } else {
+                ps.setString(1, "%");
+            }
+            ps.setInt(2, ((curPage - 1) * pageSize));
+            ps.setInt(3, pageSize);
+            rs = ps.executeQuery();
+
+            while (rs != null && rs.next()) {
+                // 将结果转为对象
+                majorInfos.add(DBConnectionUtil.toMajorObject(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            // 释放资源
+            DBConnectionUtil.release(rs, ps, connection);
+        }
+        return majorInfos;
+    }
+
+    @Override
+    public int count(String likeMajorName) {
+        StringBuffer query = new StringBuffer("");
+        query.append(" select count(*) cnt from sys_majorinfo");
+        if (likeMajorName != null && !likeMajorName.equals("")) {
+            query.append(" where major_name like '%").append(likeMajorName).append("%'");
+        }
+        int count = 0;
+        try {
+            //2.创建连接对象
+            Connection conn = DBConnectionUtil.getConnection();
+            //3.创建语句对象
+            PreparedStatement psmt = conn.prepareStatement(query.toString());
+            //4.执行SQL命令，获得ResultSet对象
+            ResultSet rs = psmt.executeQuery();
+            //5.解析结果
+            if (rs != null && rs.next()) {
+                count = rs.getInt(1);
+            }
+            //6.释放资源
+            DBConnectionUtil.release(rs, psmt, conn);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+
+        }
+        return count;
+    }
+
     @Override
     public MajorInfo selectByMajorId(Long majorId) {
         String sql = "select * from sys_majorinfo where major_id=?";
@@ -35,11 +121,8 @@ public class MajorDaoImpl implements IMajorDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            try {
-                DBConnectionUtil.release(rs, ps, connection);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            // 释放资源
+            DBConnectionUtil.release(rs, ps, connection);
         }
 
         return majorInfo;
@@ -65,11 +148,8 @@ public class MajorDaoImpl implements IMajorDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            try {
-                DBConnectionUtil.release(rs, ps, connection);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            // 释放资源
+            DBConnectionUtil.release(rs, ps, connection);
         }
         return majorInfo;
     }
@@ -94,11 +174,8 @@ public class MajorDaoImpl implements IMajorDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            try {
-                DBConnectionUtil.release(rs, ps, connection);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            // 释放资源
+            DBConnectionUtil.release(rs, ps, connection);
         }
         return majorInfo;
     }
@@ -189,11 +266,8 @@ public class MajorDaoImpl implements IMajorDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            try {
-                DBConnectionUtil.release(null, ps, connection);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            // 释放资源
+            DBConnectionUtil.release(null, ps, connection);
         }
         return row;
     }
@@ -242,11 +316,8 @@ public class MajorDaoImpl implements IMajorDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            try {
-                DBConnectionUtil.release(null, ps, connection);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            // 释放资源
+            DBConnectionUtil.release(null, ps, connection);
         }
         return row;
     }
@@ -270,11 +341,8 @@ public class MajorDaoImpl implements IMajorDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            try {
-                DBConnectionUtil.release(null, ps, connection);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            // 释放资源
+            DBConnectionUtil.release(null, ps, connection);
         }
         return row;
     }

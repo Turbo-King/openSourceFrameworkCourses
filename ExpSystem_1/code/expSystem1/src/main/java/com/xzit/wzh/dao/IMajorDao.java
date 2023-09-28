@@ -2,6 +2,8 @@ package com.xzit.wzh.dao;
 
 import com.xzit.wzh.domain.MajorInfo;
 
+import java.util.List;
+
 /**
  * \* Created with IntelliJ IDEA.
  * \* Author: wzh
@@ -11,6 +13,30 @@ import com.xzit.wzh.domain.MajorInfo;
  * \
  */
 public interface IMajorDao {
+
+    /**
+     * 查询所有专业信息
+     *
+     * @return 专业信息列表
+     */
+    public List<MajorInfo> selectAll();
+
+    /**
+     * @param likeMajorName 模糊专业名
+     * @param curPage       当前页号
+     * @param pageSize      页面显示数据
+     * @return 专业信息列表
+     */
+    public List<MajorInfo> limit(String likeMajorName, int curPage, int pageSize);
+
+    /**
+     * 按专业名称模糊查询结果有多少条记录
+     *
+     * @param likeMajorName 模糊专业名
+     * @return 专业数量
+     */
+    public int count(String likeMajorName);
+
     /**
      * 根据专业ID查询专业
      * 信息  唯一性

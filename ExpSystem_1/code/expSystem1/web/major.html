@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>专业信息管理</title>
+</head>
+<body>
+<div class="search">
+    <span>专业名称:</span>
+    <input type="text" id="majorname">
+    <input type="button" value="查询"/>
+</div>
+<table border="1">
+    <caption>课程信息列表</caption>
+    <thead>
+    <th>校内专业代码</th>
+    <th>专业名称</th>
+    <th>所属学院</th>
+    <th>专业代号</th>
+    <th>学制</th>
+    <th>建立时间</th>
+    <th>培养层次</th>
+    <th>专业状态</th>
+    <th>操作</th>
+    </thead>
+    <tbody id="majorsBody">
+
+    </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="10">
+            <button class="fisrt-btn">首页</button>
+            <button class="prev-btn">上一页</button>
+            <span class="pageindex"></span>
+            <span>/</span>
+            <span class="pageall"></span>
+            <span>共有</span>
+            <span class="count"></span>
+            <span>条记录</span>
+            <button class="next-btn">下一页</button>
+            <button class="last-btn">尾页</button>
+            <span>每页显示</span>
+            <select class="pagesize-sel">
+                <option value="2">2</option>
+                <option value="5">5</option>
+                <option value="7">7</option>
+                <option selected value="10">10</option>
+            </select>
+            <span>条</span>
+        </td>
+    </tr>
+    </tfoot>
+</table>
+
+<script src="static/js/jquery/jquery-3.7.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        //异步加载专业信息第一页的数据
+        load();
+    });
+
+
+    //完成导航条的功能
+    function load() {
+        let url = "http://localhost:8080/major";
+        $.ajax({
+            type: "get",
+            url: url,
+            data: {
+                "pageNo": 1,
+                "pageSize": 5
+            },
+            dataType: "json",
+            success: function (result) {
+                // console.log(result);
+                //知识点：JQuery操作标签元素对象
+                //将返回的专业信息数组迭代成table中的每一行
+                $.each(result.data, function (index, major) {
+                    let tr = "<tr>";
+                    tr += "<td>" + major.innerCode + "</td>";
+                    tr += "<td>" + major.majorName + "</td>";
+                    tr += "<td>" + major.uderSchool + "</td>";
+                    tr += "<td>" + major.genCode + "</td>";
+                    tr += "<td>" + major.eduSystem + "</td>";
+                    tr += "<td>" + major.setYm + "</td>";
+                    tr += "<td>" + major.culLevel + "</td>";
+                    tr += "<td>" + major.state + "</td>";
+                    tr += "<td><input type='button' id='edit' value='编辑'/><input type='button' id='delete' value='删除'> </td>";
+                    tr += "</tr>";
+                    $("#majorsBody").append(tr);
+                });
+
+                // 总数赋值给页面
+                $(".count").text(result.count)
+            }
+        });
+    }
+</script>
+</body>
+</html>

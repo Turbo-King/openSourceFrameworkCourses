@@ -6,6 +6,8 @@ import com.xzit.wzh.domain.MajorInfo;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+
 /**
  * \* Created with IntelliJ IDEA.
  * \* Author: wzh
@@ -80,5 +82,24 @@ public class MajorDao {
         Long[] majorIds = {3L, 5L};
         int row = majorDao.deleteByMajorIds(majorIds);
         System.out.println("row = " + row);
+    }
+
+    @Test
+    public void selectAll() {
+        List<MajorInfo> majorInfos = majorDao.selectAll();
+        for (MajorInfo majorInfo : majorInfos) {
+            System.out.println(majorInfo);
+        }
+    }
+
+    @Test
+    public void limit() {
+        String likeMajorName = "专";
+        int curPage = 0;
+        int pageSize = 10;
+        List<MajorInfo> majorInfos = majorDao.limit(likeMajorName, curPage, pageSize);
+        for (MajorInfo majorInfo : majorInfos) {
+            System.out.println(majorInfo);
+        }
     }
 }

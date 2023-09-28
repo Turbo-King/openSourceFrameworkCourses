@@ -1,6 +1,7 @@
 package com.xzit.wzh.dao;
 
 import com.xzit.wzh.domain.ClassInfo;
+
 import java.util.List;
 
 /**
@@ -12,6 +13,21 @@ import java.util.List;
  * \
  */
 public interface IClassDao {
+    /**
+     * 查询所有班级信息
+     *
+     * @return 班级信息列表
+     */
+    public List<ClassInfo> selectAll();
+
+    /**
+     * @param likeClassName 模糊班级名
+     * @param curPage       当前页号
+     * @param pageSize      页面显示数据
+     * @return 班级信息列表
+     */
+    public List<ClassInfo> limit(String likeClassName, int curPage, int pageSize);
+
     /**
      * 根据班级ID查询班级信息  唯一性
      */
