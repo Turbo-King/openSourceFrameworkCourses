@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--配置Department对象：通过设值注入-->
+    <bean id="department1" class="com.xzit.domain.Department">
+        <property name="id" value="1"/>
+        <property name="name" value="信息工程学院"/>
+    </bean>
+
+
+    <!--配置Department对象：通过构造注入-->
+    <bean id="department2" class="com.xzit.domain.Department">
+        <constructor-arg index="0" value="2" type="int"/>
+        <constructor-arg index="1" value="机电工程学院" type="java.lang.String"/>
+    </bean>
+
+    <!--配置Department对象：通过构造注入-->
+    <bean id="department3" class="com.xzit.domain.Department">
+        <constructor-arg name="id" value="2"/>
+        <constructor-arg name="name" value="机电工程学院"/>
+    </bean>
+
+
+    <bean id="collectionPropertyDI" class="com.xzit.domain.CollectionPropertyDI">
+        <!--为数组注入值-->
+        <property name="strs">
+            <list>
+                <value>徐州工程学院</value>
+                <value>信电工程学院</value>
+                <value>计算机科学与技术</value>
+            </list>
+        </property>
+        <!--为List注入值-->
+        <property name="departmentList">
+            <list>
+                <ref bean="department1"/>
+                <ref bean="department2"/>
+            </list>
+        </property>
+        <!--为Set注入值-->
+        <property name="stringSet">
+            <set>
+                <value>徐州工程学院</value>
+                <value>信电工程学院</value>
+                <value>计算机科学与技术</value>
+            </set>
+        </property>
+        <!--为Map注入值-->
+        <property name="map">
+            <map>
+                <entry key="myname" value="胡局新"/>
+                <entry key="mydepartment" value="信电工程学院"/>
+            </map>
+        </property>
+        <!--为Properties注入值-->
+        <property name="p">
+            <props>
+                <prop key="driverClassName">com.mysql.jdbc.Driver</prop>
+                <prop key="url">jdbc:mysql://localhost/xzit_xdxy</prop>
+                <prop key="username">root</prop>
+            </props>
+        </property>
+    </bean>
+</beans>
